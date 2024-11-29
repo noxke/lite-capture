@@ -243,29 +243,32 @@ int nl_msg_capture_handler(struct nl_msg_struct *msg) {
 
     switch (ip_header->protocol) {
         case IPPROTO_ICMP:
-            printf("[ICMP] %s->%s\n",
-                inet_ntoa(*(struct in_addr *)&ip_header->saddr),
+            printf("[ICMP] %s->",
+                inet_ntoa(*(struct in_addr *)&ip_header->saddr));
+            printf("%s\n",
                 inet_ntoa(*(struct in_addr *)&ip_header->daddr));
             break;
         case IPPROTO_TCP:
             struct tcphdr *tcp_header = (struct tcphdr *)((void *)ip_header + ip_header->ihl*4);
-            printf("[TCP] %s:%hu->%s:%hu\n",
+            printf("[TCP] %s:%hu->",
                  inet_ntoa(*(struct in_addr *)&ip_header->saddr),
-                 ntohs(tcp_header->source),
-                 inet_ntoa(*(struct in_addr *)&ip_header->daddr),
+                 ntohs(tcp_header->source));
+            printf("%s:%hu\n",
+                inet_ntoa(*(struct in_addr *)&ip_header->daddr),
                  ntohs(tcp_header->dest));
             break;
         case IPPROTO_UDP:
             struct udphdr *udp_header = (struct udphdr *)((void *)ip_header + ip_header->ihl*4);
-            printf("[UDP] %s:%hu->%s:%hu\n",
+            printf("[UDP] %s:%hu->",
                  inet_ntoa(*(struct in_addr *)&ip_header->saddr),
-                 ntohs(udp_header->source),
-                 inet_ntoa(*(struct in_addr *)&ip_header->daddr),
+                 ntohs(udp_header->source));
+            printf("%s:%hu\n", inet_ntoa(*(struct in_addr *)&ip_header->daddr),
                  ntohs(udp_header->dest));
             break;
         default:
-            printf("[IP] %s->%s\n",
-                inet_ntoa(*(struct in_addr *)&ip_header->saddr),
+            printf("[IP] %s->",
+                inet_ntoa(*(struct in_addr *)&ip_header->saddr));
+            printf("%s\n",
                 inet_ntoa(*(struct in_addr *)&ip_header->daddr));
             break;
     }
